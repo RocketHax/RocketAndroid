@@ -2,6 +2,8 @@ package com.techclutch.rocket.rocketandroid.math;
 
 import com.techclutch.rocket.rocketandroid.api.model.Location;
 
+import java.util.ArrayList;
+
 /**
  * Created by ArifH_AW17 on 4/29/2017.
  */
@@ -152,5 +154,35 @@ public class GPSMathProcessor {
 
         return new Location("", Rad2Deg(rLat), Rad2Deg(rLong), 0.0, "IntersectionPoint", "");
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //Region//////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    //Should return number of coordinates where N > 1, Count = N(N-1)/2
+    //Returns bunch of GPS points to represent the region triangulated.
+    public ArrayList<Location> TriangulateRegion(ArrayList<Location> reports)
+    {
+        if (reports == null || reports.size() < 2)
+            return null;
+
+        ArrayList<Location> resultingRegion = new ArrayList<Location>();
+
+        for (int i = 0; i < reports.size(); ++i)
+        {
+            Location currReport = reports.get(i);
+
+            for(int j = i + 1; j < reports.size(); ++j)
+            {
+                Location otherReport = reports.get(j);
+                Location res = CalculateIntersection(currReport, otherReport);
+                res.setName("RegionPoint");
+                resultingRegion.add(res);
+            }
+        }
+
+        return resultingRegion;
+    }
+
 
 }

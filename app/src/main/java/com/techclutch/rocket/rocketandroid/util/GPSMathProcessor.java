@@ -184,5 +184,50 @@ public class GPSMathProcessor {
         return resultingRegion;
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //Find Most///////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    Location FindMostNorthEast(ArrayList<Location> locations)
+    {
+        if(locations.isEmpty())
+            return null;
+
+        if(locations.size() == 1)
+            return locations.get(0);
+
+        Location mostNE = locations.get(0);
+
+        for(int i = 0; i < locations.size(); ++i)
+        {
+            Location curr = locations.get(i);
+
+            if(mostNE.getLatitude() < curr.getLatitude() && mostNE.getLongitude() < curr.getLongitude())
+                mostNE = curr;
+        }
+
+        return mostNE;
+    }
+
+    Location FindMostSouthWest(ArrayList<Location> locations)
+    {
+        if(locations.isEmpty())
+            return null;
+
+        if(locations.size() == 1)
+            return locations.get(0);
+
+        Location mostSW = locations.get(0);
+
+        for(int i = 0; i < locations.size(); ++i)
+        {
+            Location curr = locations.get(i);
+
+            if(mostSW.getLatitude() > curr.getLatitude() && mostSW.getLongitude() > curr.getLongitude())
+                mostSW = curr;
+        }
+
+        return mostSW;
+    }
 
 }

@@ -230,27 +230,6 @@ public class GPSMathProcessor {
         return mostE;
     }
 
-    Location FindMostNorthEast(ArrayList<Location> locations)
-    {
-        if(locations.isEmpty())
-            return null;
-
-        if(locations.size() == 1)
-            return locations.get(0);
-
-        Location mostNE = locations.get(0);
-
-        for(int i = 0; i < locations.size(); ++i)
-        {
-            Location curr = locations.get(i);
-
-            if(mostNE.getLatitude() < curr.getLatitude() && mostNE.getLongitude() < curr.getLongitude())
-                mostNE = curr;
-        }
-
-        return mostNE;
-    }
-
     Location FindMostSouth(ArrayList<Location> locations)
     {
         if(locations.isEmpty())
@@ -293,7 +272,7 @@ public class GPSMathProcessor {
         return mostW;
     }
 
-    Location FindMostSouthWest(ArrayList<Location> locations)
+    Location FindMostNorthEastCorner(ArrayList<Location> locations)
     {
         if(locations.isEmpty())
             return null;
@@ -301,17 +280,34 @@ public class GPSMathProcessor {
         if(locations.size() == 1)
             return locations.get(0);
 
-        Location mostSW = locations.get(0);
+        Location mostN = FindMostNorth(locations);
+        Location mostE = FindMostEast(locations);
 
-        for(int i = 0; i < locations.size(); ++i)
-        {
-            Location curr = locations.get(i);
+        mostN.setBearing(80);
+        mostE.setBearing(10);
 
-            if(mostSW.getLatitude() > curr.getLatitude() && mostSW.getLongitude() > curr.getLongitude())
-                mostSW = curr;
-        }
+        Location cornerNE = CalculateIntersection(mostN, mostE);
 
-        return mostSW;
+        return cornerNE;
+    }
+
+    Location FindMostSouthWestCorner(ArrayList<Location> locations)
+    {
+        if(locations.isEmpty())
+            return null;
+
+        if(locations.size() == 1)
+            return locations.get(0);
+
+        Location mostS = FindMostSouth(locations);
+        Location mostW = FindMostWest(locations);
+
+        mostS.setBearing(-170);
+        mostW.setBearing(-100);
+
+        Location cornerSE = CalculateIntersection(mostS, mostW);
+
+        return cornerSE;
     }
 
 

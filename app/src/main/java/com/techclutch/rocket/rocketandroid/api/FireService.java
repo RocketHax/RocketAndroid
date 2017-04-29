@@ -17,14 +17,14 @@ import retrofit2.http.Path;
 public interface FireService {
 
     @GET("/evacuation?latitude={latitude}&longitude={longtitude}")
-    Call<List<Location>> getEvacuationList(@Path("latitude") String latitude, @Path("longitude") String longitude);
+    Call<List<Location>> getEvacuationList(@Path("latitude") double latitude, @Path("longitude") double longitude);
 
     @GET("/reportfire?latitude1={latitude1}&latitude2={latitude2}&longitude1={longitude1}&longitude2={longitude2}")
-    Call<List<Location>> getFireList(@Path("latitude1") String latitude1, @Path("latitude2") String latitude2, @Path("longitude1") String longitude1, @Path("longitude2") String longitude2);
+    Call<List<Location>> getFireList(@Path("latitude1") double latitude1, @Path("latitude2") double latitude2, @Path("longitude1") double longitude1, @Path("longitude2") double longitude2);
 
     @POST("/evacuation")
-    Call<Location> requestEvacuation(@Body String latitude, @Body String longitude);
+    Call<Location> requestEvacuation(@Body Location location);
 
     @POST("/reportfire")
-    Call<Location> reportFire(@Body String latitude, @Body String longitude, @Body double bearing);
+    Call<Location> reportFire(@Body Location location);
 }

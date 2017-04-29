@@ -1,7 +1,7 @@
 package com.techclutch.rocket.rocketandroid.api;
 
 import retrofit2.Retrofit;
-import retrofit2.converter.moshi.MoshiConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Arman on 4/29/2017.
@@ -16,7 +16,7 @@ public class RestService {
     public RestService() {
          retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         fireService = retrofit.create(FireService.class);

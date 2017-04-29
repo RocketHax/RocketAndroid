@@ -1,4 +1,4 @@
-package com.techclutch.rocket.rocketandroid.math;
+package com.techclutch.rocket.rocketandroid.util;
 
 import com.techclutch.rocket.rocketandroid.api.model.Location;
 

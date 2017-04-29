@@ -1,15 +1,27 @@
 package com.techclutch.rocket.rocketandroid.api.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Arman on 4/29/2017.
  */
 
 public class Location {
+    @SerializedName("id")
     String id;
+    @SerializedName("latitude")
+    @Expose
     double latitude;
+    @SerializedName("longitude")
+    @Expose
     double longitude;
+    @SerializedName("bearing")
+    @Expose
     double bearing;
+    @SerializedName("name")
     String name;
+    @SerializedName("type")
     String type;
 
     public Location(String id, double latitude, double longitude, double bearing, String name, String type) {

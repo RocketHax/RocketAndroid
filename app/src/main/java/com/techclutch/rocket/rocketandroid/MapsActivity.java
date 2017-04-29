@@ -47,9 +47,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final float DEFAULT_ZOOM = 10.0f;
     private GoogleMap mMap;
     private MarkerOptions myLocation;
-    private static final LatLng EVAC_POINT = new LatLng(39.528271, -105.317200);
-    private static final LatLng DISASTER_POINT = new LatLng(39.451833, -105.181297);
-    private static final LatLng FIRESTATION_POINT = new LatLng(39.498242, -105.334889);
+    private static final LatLng EVAC_POINT = new LatLng(39.528271, -105.317200);//39.952757, -105.526083
+    private static final LatLng DISASTER_POINT = new LatLng(39.451833, -105.181297);//39.984 latitude, -105.489
+    private static final LatLng FIRESTATION_POINT = new LatLng(39.498242, -105.334889);//39.967422, -105.516022
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

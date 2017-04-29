@@ -66,6 +66,8 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.techclutch.rocket.rocketandroid.widgets.AutoFitTextureView;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

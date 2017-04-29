@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">RocketAndroid</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="picture">Picture</string>
+    <string name="description_info">Info</string>
+    <string name="request_permission">Requesting Camera permission.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="report_instruction">Please take a photo of the fire. We will send the image with your location to the authorities.</string>
+</resources>

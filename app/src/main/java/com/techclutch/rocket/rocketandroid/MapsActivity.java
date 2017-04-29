@@ -24,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.techclutch.rocket.rocketandroid.api.RestService;
 import com.techclutch.rocket.rocketandroid.api.model.Location;
@@ -48,7 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         OnCameraMoveStartedListener,
         OnCameraMoveListener,
         OnCameraMoveCanceledListener,
-        OnCameraIdleListener, {
+        OnCameraIdleListener {
 
     @BindView(fab_report_fire)
     FloatingActionButton fabReportFire;
@@ -63,10 +64,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final float DEFAULT_ZOOM = 10.0f;
     private GoogleMap mMap;
     private MarkerOptions myLocation;
-    private static final LatLng EVAC_POINT = new LatLng(39.528271, -105.317200);//39.952757, -105.526083
-    private static final LatLng DISASTER_POINT = new LatLng(39.451833, -105.181297);//39.984 latitude, -105.489
-    private static final LatLng FIRESTATION_POINT = new LatLng(39.498242, -105.334889);//39.967422, -105.516022
+    private static final LatLng EVAC_POINT = new LatLng(39.952757, 105.526083);//39.952757, -105.526083
+    private static final LatLng DISASTER_POINT = new LatLng(39.984 , -105.489);//39.984 latitude, -105.489
+    private static final LatLng FIRESTATION_POINT = new LatLng(39.967422, -105.516022);//39.967422, -105.516022
     private RestService restService = new RestService();
+    private List<Marker> fireMarkers = new ArrayList<>();
+    private List<Marker> evacMarkers = new ArrayList<>();
+    private List<Marker> stationMarkers = new ArrayList<>();
+    private Marker myLocationMarker;
 
     public enum MarkerType {
         FIRE,
@@ -84,7 +89,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
     }
 
     /**
@@ -185,7 +189,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             results.enqueue(new Callback<List<Location>>() {
                 @Override
                 public void onResponse(Call<List<Location>> call, Response<List<Location>> response) {
-                    populateMap(response.body(), MarkerType.FIRE);
+                    clearMarkers(fireMarkers);
+                    populateMap(fireMarkers, response.body(), MarkerType.FIRE);
                 }
 
                 @Override
@@ -196,9 +201,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void populateMap(List<Location> results, MarkerType type) {
+    private void populateMap(List<Marker> markers, List<Location> results, MarkerType type) {
         for (Location location : results) {
-            mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).icon(getMarker(type)));
+            markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).icon(getMarker(type))));
         }
+    }
+
+    private void clearMarkers(List<Marker> markers) {
+        for(Marker marker : markers) {
+            marker.remove();
+        }
+
+        markers.clear();
     }
 }

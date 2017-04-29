@@ -9,4 +9,8 @@
 
     <string name="error_service">Error getting data from webservice.</string>
     <string name="report_sent">Your report has been sent. Thank you for contributing!</string>
+    <string name="help_coming">Sit tight, help is on the way!</string>
+    <string name="no_route">There are no safe routes. Opps.</string>
+    <string name="no_evac">There are no evacuation sites defined. Opps.</string>
+    <string name="no_station">There are no fire stations defined. Opps.</string>
 </resources>

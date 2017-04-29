@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:text="@string/report_instruction"
             android:layout_gravity="center_vertical"
+            android:padding="8dp"
             android:layout_marginLeft="8dp"
             android:layout_weight="1.5"/>
 

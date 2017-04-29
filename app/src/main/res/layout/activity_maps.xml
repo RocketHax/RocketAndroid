@@ -19,7 +19,7 @@
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:src="@drawable/common_google_signin_btn_icon_dark" />
+        android:src="@drawable/ic_get_me_out" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_save_me"
@@ -30,7 +30,7 @@
         android:layout_gravity="bottom"
         android:layout_marginRight="16dp"
         android:clickable="true"
-        android:src="@drawable/common_google_signin_btn_icon_dark" />
+        android:src="@drawable/ic_rescue_me" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_report_fire"
@@ -41,7 +41,7 @@
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:src="@drawable/common_google_signin_btn_icon_dark" />
+        android:src="@drawable/ic_report_fire" />
 
 </RelativeLayout>
 

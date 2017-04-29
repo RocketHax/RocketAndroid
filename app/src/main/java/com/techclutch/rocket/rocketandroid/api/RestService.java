@@ -1,5 +1,7 @@
 package com.techclutch.rocket.rocketandroid.api;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -9,13 +11,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestService {
 
-    public static final String BASE_URL = "http://localhost:60131/api//";
+    public static final String BASE_URL = "http://api.geonames.org";
+    //public static final String BASE_URL = "http://10.30.41.87:60131";
+    //public static final String BASE_URL = "http://172.20.10.2:60131";
+    //public static final String BASE_URL = "http://10.0.2.2:60131/";
     private Retrofit retrofit;
     private FireService fireService;
+    private OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
+            .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
 
     public RestService() {
-         retrofit = new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(clientBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

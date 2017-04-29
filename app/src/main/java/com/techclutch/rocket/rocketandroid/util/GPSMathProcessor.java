@@ -188,6 +188,48 @@ public class GPSMathProcessor {
     //Find Most///////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////
 
+    Location FindMostNorth(ArrayList<Location> locations)
+    {
+        if(locations.isEmpty())
+            return null;
+
+        if(locations.size() == 1)
+            return locations.get(0);
+
+        Location mostN = locations.get(0);
+
+        for(int i = 0; i < locations.size(); ++i)
+        {
+            Location curr = locations.get(i);
+
+            if(mostN.getLatitude() < curr.getLatitude())
+                mostN = curr;
+        }
+
+        return mostN;
+    }
+
+    Location FindMostEast(ArrayList<Location> locations)
+    {
+        if(locations.isEmpty())
+            return null;
+
+        if(locations.size() == 1)
+            return locations.get(0);
+
+        Location mostE = locations.get(0);
+
+        for(int i = 0; i < locations.size(); ++i)
+        {
+            Location curr = locations.get(i);
+
+            if(mostE.getLongitude() < curr.getLongitude())
+                mostE = curr;
+        }
+
+        return mostE;
+    }
+
     Location FindMostNorthEast(ArrayList<Location> locations)
     {
         if(locations.isEmpty())
@@ -207,6 +249,48 @@ public class GPSMathProcessor {
         }
 
         return mostNE;
+    }
+
+    Location FindMostSouth(ArrayList<Location> locations)
+    {
+        if(locations.isEmpty())
+            return null;
+
+        if(locations.size() == 1)
+            return locations.get(0);
+
+        Location mostS = locations.get(0);
+
+        for(int i = 0; i < locations.size(); ++i)
+        {
+            Location curr = locations.get(i);
+
+            if(mostS.getLatitude() > curr.getLatitude())
+                mostS = curr;
+        }
+
+        return mostS;
+    }
+
+    Location FindMostWest(ArrayList<Location> locations)
+    {
+        if(locations.isEmpty())
+            return null;
+
+        if(locations.size() == 1)
+            return locations.get(0);
+
+        Location mostW = locations.get(0);
+
+        for(int i = 0; i < locations.size(); ++i)
+        {
+            Location curr = locations.get(i);
+
+            if(mostW.getLongitude() > curr.getLongitude())
+                mostW = curr;
+        }
+
+        return mostW;
     }
 
     Location FindMostSouthWest(ArrayList<Location> locations)
@@ -229,5 +313,7 @@ public class GPSMathProcessor {
 
         return mostSW;
     }
+
+
 
 }

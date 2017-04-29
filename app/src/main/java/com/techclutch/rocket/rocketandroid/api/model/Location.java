@@ -1,16 +1,71 @@
 package com.techclutch.rocket.rocketandroid.api.model;
 
-import com.google.android.gms.maps.model.LatLng;
-
 /**
  * Created by Arman on 4/29/2017.
  */
 
 public class Location {
     String id;
-    LatLng latitude;
-    LatLng longitude;
+    String latitude;
+    String longitude;
     double bearing;
     String name;
     String type;
+
+    public Location(String id, String latitude, String longitude, double bearing, String name, String type) {
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.bearing = bearing;
+        this.name = name;
+        this.type = type;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getBearing() {
+        return bearing;
+    }
+
+    public void setBearing(double bearing) {
+        this.bearing = bearing;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

@@ -6,4 +6,7 @@
     <string name="request_permission">Requesting Camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="report_instruction">Please take a photo of the fire. We will send the image with your location to the authorities.</string>
+
+    <string name="error_service">Error getting data from webservice.</string>
+    <string name="report_sent">Your report has been sent. Thank you for contributing!</string>
 </resources>

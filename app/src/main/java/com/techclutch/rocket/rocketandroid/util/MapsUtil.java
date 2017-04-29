@@ -17,7 +17,7 @@ public class MapsUtil {
 
     private static final float ANIMATION_ZOOM = 15.5f;
     private static final float ANIMATION_BEARING = 0;
-    private static final float ANIMATION_TILT = 25;
+    private static final float ANIMATION_TILT = 80;
 
     public static BitmapDescriptor getMarker(MapsActivity.MarkerType markerType) {
         switch(markerType) {
@@ -41,11 +41,11 @@ public class MapsUtil {
     }
 
     public static BitmapDescriptor getStationMarker() {
-        return BitmapDescriptorFactory.fromResource(R.drawable.ic_heat);
+        return BitmapDescriptorFactory.fromResource(R.drawable.ic_fire_station);
     }
 
     public static BitmapDescriptor getYourLocationMarker() {
-        return BitmapDescriptorFactory.fromResource(R.drawable.ic_evacuation);
+        return BitmapDescriptorFactory.fromResource(R.drawable.ic_my_location);
     }
 
     public static CameraUpdate getCameraUpdatePosition(LatLng point) {

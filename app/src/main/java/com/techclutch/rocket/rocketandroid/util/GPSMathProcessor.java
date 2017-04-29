@@ -1,4 +1,4 @@
-package com.techclutch.rocket.rocketandroid.math;
+package com.techclutch.rocket.rocketandroid.util;
 
 import com.techclutch.rocket.rocketandroid.api.model.Location;
 
@@ -310,6 +310,13 @@ public class GPSMathProcessor {
         return cornerSE;
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //GPS Coordinate within radius of GPS Coordinate//////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////
 
+    public boolean GPSPointWithinRadius(Location p1, Location p2, double radiusKM)
+    {
+        return CalculateDistance(p1, p2) < radiusKM;
+    }
 
 }

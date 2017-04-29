@@ -6,13 +6,13 @@ package com.techclutch.rocket.rocketandroid.api.model;
 
 public class Location {
     String id;
-    String latitude;
-    String longitude;
+    double latitude;
+    double longitude;
     double bearing;
     String name;
     String type;
 
-    public Location(String id, String latitude, String longitude, double bearing, String name, String type) {
+    public Location(String id, double latitude, double longitude, double bearing, String name, String type) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -29,19 +29,19 @@ public class Location {
         this.id = id;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 

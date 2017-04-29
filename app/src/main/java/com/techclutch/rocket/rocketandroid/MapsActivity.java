@@ -16,23 +16,39 @@ import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveCanceledListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.techclutch.rocket.rocketandroid.api.RestService;
+import com.techclutch.rocket.rocketandroid.api.model.Location;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.techclutch.rocket.rocketandroid.R.id.fab_report_fire;
 import static com.techclutch.rocket.rocketandroid.util.MapsUtil.getCameraUpdatePosition;
 import static com.techclutch.rocket.rocketandroid.util.MapsUtil.getEvacMarker;
 import static com.techclutch.rocket.rocketandroid.util.MapsUtil.getFireMarker;
+import static com.techclutch.rocket.rocketandroid.util.MapsUtil.getMarker;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+        OnCameraMoveStartedListener,
+        OnCameraMoveListener,
+        OnCameraMoveCanceledListener,
+        OnCameraIdleListener, {
 
     @BindView(fab_report_fire)
     FloatingActionButton fabReportFire;
@@ -50,6 +66,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final LatLng EVAC_POINT = new LatLng(39.528271, -105.317200);//39.952757, -105.526083
     private static final LatLng DISASTER_POINT = new LatLng(39.451833, -105.181297);//39.984 latitude, -105.489
     private static final LatLng FIRESTATION_POINT = new LatLng(39.498242, -105.334889);//39.967422, -105.516022
+    private RestService restService = new RestService();
+
+    public enum MarkerType {
+        FIRE,
+        EVAC,
+        STATION,
+        MYLOCATION
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
     /**
@@ -129,6 +154,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String imagePath = intent.getStringExtra("imagepath");
             double bearing = intent.getDoubleExtra("bearing", 0);
             Toast.makeText(this, "Photo success " + imagePath + bearing, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onCameraIdle() {
+        Toast.makeText(this, "The camera has stopped moving. Fetch the data from the server!", Toast.LENGTH_SHORT).show();
+        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+        getFireData(bounds);
+    }
+
+    @Override
+    public void onCameraMoveCanceled() {
+
+    }
+
+    @Override
+    public void onCameraMove() {
+
+    }
+
+    @Override
+    public void onCameraMoveStarted(int i) {
+
+    }
+
+    private void getFireData(LatLngBounds bounds) {
+        if (restService != null) {
+            Call<List<Location>> results = restService.getFireService().getFireList(bounds.northeast.latitude + "", bounds.southwest.latitude + "", bounds.northeast.longitude + "", bounds.southwest.latitude + "");
+            results.enqueue(new Callback<List<Location>>() {
+                @Override
+                public void onResponse(Call<List<Location>> call, Response<List<Location>> response) {
+                    populateMap(response.body(), MarkerType.FIRE);
+                }
+
+                @Override
+                public void onFailure(Call<List<Location>> call, Throwable t) {
+
+                }
+            });
+        }
+    }
+
+    private void populateMap(List<Location> results, MarkerType type) {
+        for (Location location : results) {
+            mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).icon(getMarker(type)));
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.techclutch.rocket.rocketandroid.api;
 
 import com.techclutch.rocket.rocketandroid.api.model.Location;
+import com.techclutch.rocket.rocketandroid.api.model.Locations;
+import com.techclutch.rocket.rocketandroid.api.model.ModisLocation;
 
 import java.util.List;
 
@@ -18,11 +20,11 @@ import retrofit2.http.Query;
 public interface FireService {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/api/evacuation")
-    Call<List<Location>> getEvacuationList(@Query("latitude") double latitude, @Query("longitude") double longitude);
+    Call<Locations> getEvacuationList(@Query("latitude") double latitude, @Query("longitude") double longitude);
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/api/reportfire")
-    Call<List<Location>> getFireList(@Query("latitude1") double latitude1, @Query("latitude2") double latitude2, @Query("longitude1") double longitude1, @Query("longitude2") double longitude2);
+    Call<Locations> getFireList(@Query("latitude1") double latitude1, @Query("latitude2") double latitude2, @Query("longitude1") double longitude1, @Query("longitude2") double longitude2);
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/api/evacuation")
@@ -37,4 +39,9 @@ public interface FireService {
     @GET("/citiesJSON")
     Call<Void> getCities(@Query("north") double north, @Query("south") double south, @Query("east") double east,
                              @Query("west") double west, @Query("lang") String lang, @Query("username") String username);
+
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/api/nasafiredatamodis")
+    Call<List<ModisLocation>> getFireModis();
 }
+//api/nasafiredatamodis

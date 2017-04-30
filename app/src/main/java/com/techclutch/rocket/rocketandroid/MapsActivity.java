@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
@@ -29,6 +28,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.techclutch.rocket.rocketandroid.api.RestService;
 import com.techclutch.rocket.rocketandroid.api.model.Location;
+import com.techclutch.rocket.rocketandroid.api.model.Locations;
+import com.techclutch.rocket.rocketandroid.api.model.ModisLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,10 +70,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Marker> fireMarkers = new ArrayList<>();
     private List<Marker> evacMarkers = new ArrayList<>();
     private List<Marker> stationMarkers = new ArrayList<>();
-    private List<Location> fireLocation = new ArrayList<>();
-    private List<Location> evacLocation = new ArrayList<>();
-    private List<Location> stationLocation = new ArrayList<>();
-    private List<Location> activeDataLocation = new ArrayList<>();
+    private Locations fireLocation = new Locations();
+    private Locations evacLocation = new Locations();
+    private Locations stationLocation = new Locations();
+    private Locations activeDataLocation = new Locations();
 
     private Marker myLocationMarker;
     private LatLng myLocation = DISASTER_POINT;
@@ -120,6 +121,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM));
         mMap.animateCamera(getCameraUpdatePosition(DISASTER_POINT));
         //testWebService();
+        getEvacuationData(myLocation);
+//        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+//        getFireData(bounds);
+        getFireModisData();
     }
 
     private void testWebService() {
@@ -147,27 +152,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // find route from station
     @OnClick(R.id.fab_save_me)
     void onSaveMe() {
-        activeDataLocation = stationLocation;
-        if (!activeDataLocation.isEmpty()) {
-            plotRoutes(getActiveLatLng(0), myLocation, getString(R.string.help_coming), 0);
-        } else {
-            Snackbar.make(fabReportFire, getString(R.string.no_station), Snackbar.LENGTH_SHORT).show();
-        }
+        plotRoutes(FIRESTATION_POINT, myLocation, getString(R.string.help_coming), 0);
+//        activeDataLocation = stationLocation;
+//        if (!activeDataLocation.getLocations().isEmpty()) {
+//            plotRoutes(getActiveLatLng(0), myLocation, getString(R.string.help_coming), 0);
+//        } else {
+//            Snackbar.make(fabReportFire, getString(R.string.no_station), Snackbar.LENGTH_SHORT).show();
+//        }
     }
 
     // find evac route
     @OnClick(R.id.fab_get_me_out)
     void onGetMeOutClicked() {
-        activeDataLocation = evacLocation;
-        if (!activeDataLocation.isEmpty()) {
-            plotRoutes(getActiveLatLng(0), myLocation, "", 0);
-        } else {
-            Snackbar.make(fabReportFire, getString(R.string.no_evac), Snackbar.LENGTH_SHORT).show();
-        }
+        plotRoutes(myLocation, EVAC_POINT, getString(R.string.help_coming), 0);
+//        activeDataLocation = evacLocation;
+//        if (!activeDataLocation.getLocations().isEmpty()) {
+//            plotRoutes(getActiveLatLng(0), myLocation, "", 0);
+//        } else {
+//            Snackbar.make(fabReportFire, getString(R.string.no_evac), Snackbar.LENGTH_SHORT).show();
+//        }
     }
 
     private LatLng getActiveLatLng(int index) {
-        return new LatLng(activeDataLocation.get(index).getLatitude(), activeDataLocation.get(index).getLongitude());
+        return new LatLng(activeDataLocation.getLocations().get(index).getLatitude(), activeDataLocation.getLocations().get(index).getLongitude());
     }
 
     private void plotRoutes(final LatLng from, final LatLng to, final String message, final int index) {
@@ -188,16 +195,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 mMap.addPolyline(DirectionConverter.createPolyline(MapsActivity.this, directionPositionList, 5, Color.parseColor(color)));
                                 mMap.animateCamera(getCameraUpdatePosition(from), Math.max(ANIM_DURATION, 1), null);
                                 if (!message.isEmpty()) {
-                                    Snackbar.make(fabReportFire, getString(R.string.help_coming), Snackbar.LENGTH_SHORT).show();
+                                    //Snackbar.make(fabReportFire, getString(R.string.help_coming), Snackbar.LENGTH_SHORT).show();
                                 }
                             }
                         } else {
-                            if (index < activeDataLocation.size()) {
-                                int next_index = index + 1;
-                                plotRoutes(getActiveLatLng(next_index), EVAC_POINT, "", next_index);
-                            } else {
-                                Snackbar.make(fabReportFire, getString(R.string.no_route), Snackbar.LENGTH_SHORT).show();
-                            }
+//                            if (index < activeDataLocation.getLocations().size()) {
+//                                int next_index = index + 1;
+//                                plotRoutes(getActiveLatLng(next_index), EVAC_POINT, "", next_index);
+//                            } else {
+//                                Snackbar.make(fabReportFire, getString(R.string.no_route), Snackbar.LENGTH_SHORT).show();
+//                            }
+                            //Snackbar.make(fabReportFire, getString(R.string.no_route), Snackbar.LENGTH_SHORT).show();
                         }
                     }
 
@@ -213,16 +221,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (requestCode == TAKE_PIC_CODE && resultCode == RESULT_OK && intent != null) {
             String imagePath = intent.getStringExtra("imagepath");
             double bearing = intent.getDoubleExtra("bearing", 0);
-            Toast.makeText(this, "Photo success " + imagePath + bearing, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Photo success " + imagePath + bearing, Toast.LENGTH_SHORT).show();
             sendFireReport(imagePath, myLocation, bearing);
         }
     }
 
     @Override
     public void onCameraIdle() {
-        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
-        getFireData(bounds);
-        getEvacuationData(myLocation);
+        //LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+        //getFireData(bounds);
+        //getEvacuationData(myLocation);
     }
 
     @Override
@@ -261,22 +269,52 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void getFireModisData() {
+        if (restService != null) {
+            Call<List<ModisLocation>> results = restService.getFireService().getFireModis();
+            results.enqueue(new Callback<List<ModisLocation>>() {
+                @Override
+                public void onResponse(Call<List<ModisLocation>> call, Response<List<ModisLocation>> response) {
+                    if(response.body() != null && !response.body().isEmpty()) {
+                        clearMarkers(fireMarkers);
+                        fireLocation.clear();
+                        Locations tempList = new Locations();
+                        for(ModisLocation location : response.body()) {
+                            tempList.getLocations().add(new Location("", location.getLatitude(), location.getLongitude(), 0, "", ""));
+                        }
+                        fireLocation = tempList;
+                        if(fireLocation != null && !fireLocation.getLocations().isEmpty()) {
+                            populateMap(fireMarkers, fireLocation.getLocations(), MarkerType.FIRE);
+                        }
+                    }
+
+                    Log.d("getFireData", response.toString());
+                }
+
+                @Override
+                public void onFailure(Call<List<ModisLocation>> call, Throwable t) {
+                    Log.d("getFireData", t.getMessage());
+                }
+            });
+        }
+    }
+
     private void getFireData(LatLngBounds bounds) {
         if (restService != null) {
-            Call<List<Location>> results = restService.getFireService().getFireList(bounds.northeast.latitude, bounds.southwest.latitude, bounds.northeast.longitude, bounds.southwest.latitude);
-            results.enqueue(new Callback<List<Location>>() {
+            Call<Locations> results = restService.getFireService().getFireList(bounds.northeast.latitude, bounds.southwest.latitude, bounds.northeast.longitude, bounds.southwest.latitude);
+            results.enqueue(new Callback<Locations>() {
                 @Override
-                public void onResponse(Call<List<Location>> call, Response<List<Location>> response) {
+                public void onResponse(Call<Locations> call, Response<Locations> response) {
                     clearMarkers(fireMarkers);
                     fireLocation = response.body();
-                    if(fireLocation != null && !fireLocation.isEmpty()) {
-                        populateMap(fireMarkers, fireLocation, MarkerType.FIRE);
+                    if(fireLocation != null && !fireLocation.getLocations().isEmpty()) {
+                        populateMap(fireMarkers, fireLocation.getLocations(), MarkerType.FIRE);
                     }
                     Log.d("getFireData", response.toString());
                 }
 
                 @Override
-                public void onFailure(Call<List<Location>> call, Throwable t) {
+                public void onFailure(Call<Locations> call, Throwable t) {
                     Snackbar.make(fabReportFire, getString(R.string.error_service), Snackbar.LENGTH_SHORT).show();
                 }
             });
@@ -285,20 +323,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void getEvacuationData(LatLng location) {
         if (restService != null) {
-            Call<List<Location>> results = restService.getFireService().getEvacuationList(location.latitude, location.longitude);
-            results.enqueue(new Callback<List<Location>>() {
+            Call<Locations> results = restService.getFireService().getEvacuationList(location.latitude, location.longitude);
+            results.enqueue(new Callback<Locations>() {
                 @Override
-                public void onResponse(Call<List<Location>> call, Response<List<Location>> response) {
+                public void onResponse(Call<Locations> call, Response<Locations> response) {
                     clearMarkers(evacMarkers);
                     evacLocation = response.body();
-                    if(evacLocation!= null && !evacLocation.isEmpty()) {
-                        populateMap(evacMarkers, evacLocation, MarkerType.EVAC);
+                    if(evacLocation!= null && !evacLocation.getLocations().isEmpty()) {
+                        populateMap(evacMarkers, evacLocation.getLocations(), MarkerType.EVAC);
                     }
                     Log.d("getEvacuationData", response.toString());
                 }
 
                 @Override
-                public void onFailure(Call<List<Location>> call, Throwable t) {
+                public void onFailure(Call<Locations> call, Throwable t) {
                     Snackbar.make(fabReportFire, getString(R.string.error_service), Snackbar.LENGTH_SHORT).show();
                 }
             });
@@ -308,7 +346,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void populateMap(List<Marker> markers, List<Location> results, MarkerType type) {
         for (Location location : results) {
             markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .title(location.getName())
+                    //.title(location.getName())
                     .icon(getMarker(type))));
         }
     }

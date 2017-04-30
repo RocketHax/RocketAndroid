@@ -8,20 +8,23 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Location {
-    @SerializedName("id")
+    @SerializedName("Id")
+    @Expose(serialize = false, deserialize = false)
     String id;
-    @SerializedName("latitude")
+    @SerializedName("Latitude")
     @Expose
     double latitude;
-    @SerializedName("longitude")
+    @SerializedName("Longitude")
     @Expose
     double longitude;
-    @SerializedName("bearing")
+    @SerializedName("Bearing")
     @Expose
     double bearing;
-    @SerializedName("name")
+    @SerializedName("Name")
+    @Expose()
     String name;
-    @SerializedName("type")
+    @SerializedName("Type")
+    @Expose()
     String type;
 
     public Location(String id, double latitude, double longitude, double bearing, String name, String type) {
